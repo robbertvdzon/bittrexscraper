@@ -48,7 +48,7 @@ public class BittrexScraperTask {
     }
 
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 60000)
     public void reportCurrentTime() {
         List<MarketSummary> summaries = getMarketSummaries();
         int changes = summaries.stream().mapToInt(summ-> processSummary(summ)).sum();

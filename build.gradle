@@ -27,6 +27,20 @@ ext {
 	springCloudVersion = 'Dalston.SR4'
 }
 
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+		attributes 'Implementation-Title': 'Tradebot',
+				'Implementation-Version': version,
+				'Main-Class': 'nl.iwire.tradebot.Main'
+	}
+	baseName = 'bittrexscraperall'
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}
+
+
+
 dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-config')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
