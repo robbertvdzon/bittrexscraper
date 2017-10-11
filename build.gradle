@@ -32,7 +32,7 @@ task fatJar(type: Jar) {
 	manifest {
 		attributes 'Implementation-Title': 'Tradebot',
 				'Implementation-Version': version,
-				'Main-Class': 'nl.iwire.tradebot.Main'
+				'Main-Class': 'com.vdzon.bittrexscraper.BittrexscraperApplication'
 	}
 	baseName = 'bittrexscraperall'
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
