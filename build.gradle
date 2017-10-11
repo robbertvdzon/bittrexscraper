@@ -30,7 +30,7 @@ ext {
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {
 	manifest {
-		attributes 'Implementation-Title': 'Tradebot',
+		attributes 'Implementation-Title': 'Bittrexscraper',
 				'Implementation-Version': version,
 				'Main-Class': 'com.vdzon.bittrexscraper.BittrexscraperApplication'
 	}
