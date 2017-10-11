@@ -1,0 +1,12 @@
+encrypt:
+  key: pass_real_passwd_as_an_environment
+
+spring:
+  application:
+    name: bittrexscraper
+  profiles:
+    active:
+      dev
+  cloud:
+    config:
+      uri: http://test.config.vdzon.com:8888
