@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
+          media="screen,projection"/>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+
+<nav>
+    <div class="nav-wrapper teal">
+        <a href="#" class="brand-logo" style="text-indent: 25px;">Bittrex Scraper</a>
+    </div>
+</nav>
+
+<h4>Muntjes</h4></li>
+<table id="coinsTable" >
+</table>
+
+
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "getmarketsummaries"
+        }).then(function(obj) {
+            $('#list').empty();
+            var output='<tr>';
+            output+='<th>MarketName</th>';
+            output+='<th>Volume</th>';
+            output+='<th>Last</th>';
+            output+='</tr>';
+            $('#coinsTable').append(output);
+
+            for(var i in obj)
+            {
+                var marketName =obj[i].MarketName;
+                var volume =obj[i].Volume;
+                var last =obj[i].Last;
+                var output='<tr>';
+                output+='<td><a href="grafiek.html?coin='+marketName+'">'+marketName+'</a></td>';
+                output+='<td><a href="grafiek.html?coin='+marketName+'">'+volume+'</a></td>';
+                output+='<td><a href="grafiek.html?coin='+marketName+'">'+last+'</a></td>';
+                output+='</tr>';
+                $('#coinsTable').append(output);
+            }
+        });
+
+    })
+
+
+</script>
+</body>
+</html>
