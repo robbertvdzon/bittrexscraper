@@ -54,10 +54,10 @@
 
             for(var i in obj)
             {
-                var timestamp =obj[i].timestamp;
-                var rate =obj[i].rate;
+                var timestamp =obj[i].t;
+                var rate =obj[i].r;
 
-                var utcSeconds = obj[i].timestamp;
+                var utcSeconds = obj[i].t;
                 var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
                 d.setUTCSeconds(utcSeconds);
 
