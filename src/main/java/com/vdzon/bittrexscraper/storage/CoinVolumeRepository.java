@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface CoinVolumeRepository extends CrudRepository<CoinVolume, Long> {
-    List<CoinVolume> findBymarketUuid(Long marketUuid);
+    List<CoinVolume> findBymarketUuidOrderByTimestampDesc(Long marketUuid);
 
 }

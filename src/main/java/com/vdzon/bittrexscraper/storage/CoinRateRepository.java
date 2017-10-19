@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CoinRateRepository extends CrudRepository<CoinRate, Long> {
-    List<CoinRate> findBymarketUuid(Long marketUuid);
+    List<CoinRate> findBymarketUuidOrderByTimestampDesc(Long marketUuid);
 }

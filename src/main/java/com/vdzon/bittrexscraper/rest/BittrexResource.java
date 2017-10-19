@@ -54,7 +54,7 @@ public class BittrexResource {
         return firstByMarketName == null
                 ? Collections.emptyList()
                 : coinVolumeRepository
-                .findBymarketUuid(firstByMarketName.uuid)
+                .findBymarketUuidOrderByTimestampDesc(firstByMarketName.uuid)
                 .stream()
                 .filter(volume->volume.getTimestamp()>datetimefrom)
                 .filter(volume->volume.getTimestamp()<datetimeto)
@@ -69,7 +69,7 @@ public class BittrexResource {
         MarketSummary firstByMarketName = marketSummaryRepository.findFirstByMarketName(marketname);
         return firstByMarketName == null
                 ? Collections.emptyList()
-                : coinRateRepository.findBymarketUuid(firstByMarketName.uuid)
+                : coinRateRepository.findBymarketUuidOrderByTimestampDesc(firstByMarketName.uuid)
                 .stream()
                 .filter(rate->rate.getTimestamp()>datetimefrom)
                 .filter(rate->rate.getTimestamp()<datetimeto)
