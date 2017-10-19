@@ -47,16 +47,33 @@ public class BittrexResource {
 
     @GetMapping(path = "/coinvolumes")
     public @ResponseBody
-    List<CoinVolume> getCoinVolumes(@RequestParam(value = "marketname") String marketname) {
+    List<CoinVolume> getCoinVolumes(@RequestParam(value = "marketname") String marketname,
+                                    @RequestParam(value = "datetimefrom", defaultValue = "0") long datetimefrom,
+                                    @RequestParam(value = "datetimeto", defaultValue = ""+Long.MAX_VALUE) long datetimeto) {
         MarketSummary firstByMarketName = marketSummaryRepository.findFirstByMarketName(marketname);
-        return firstByMarketName == null ? Collections.emptyList() : coinVolumeRepository.findBymarketUuid(firstByMarketName.uuid);
+        return firstByMarketName == null
+                ? Collections.emptyList()
+                : coinVolumeRepository
+                .findBymarketUuid(firstByMarketName.uuid)
+                .stream()
+                .filter(volume->volume.getTimestamp()>datetimefrom)
+                .filter(volume->volume.getTimestamp()<datetimeto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/coinrates")
     public @ResponseBody
-    List<CoinRate> getCoinRatges(@RequestParam(value = "marketname") String marketname) {
+    List<CoinRate> getCoinRates(@RequestParam(value = "marketname") String marketname,
+                                 @RequestParam(value = "datetimefrom", defaultValue = "0") long datetimefrom,
+                                 @RequestParam(value = "datetimeto", defaultValue = ""+Long.MAX_VALUE) long datetimeto) {
         MarketSummary firstByMarketName = marketSummaryRepository.findFirstByMarketName(marketname);
-        return firstByMarketName == null ? Collections.emptyList() : coinRateRepository.findBymarketUuid(firstByMarketName.uuid);
+        return firstByMarketName == null
+                ? Collections.emptyList()
+                : coinRateRepository.findBymarketUuid(firstByMarketName.uuid)
+                .stream()
+                .filter(rate->rate.getTimestamp()>datetimefrom)
+                .filter(rate->rate.getTimestamp()<datetimeto)
+                .collect(Collectors.toList());
     }
 
 }
