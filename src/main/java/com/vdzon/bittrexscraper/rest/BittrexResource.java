@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -37,7 +38,11 @@ public class BittrexResource {
         Iterable<MarketSummary> all = marketSummaryRepository.findAll();
         List<MarketSummary> coins = new ArrayList<>();
         all.forEach(summ -> coins.add(summ));
-        return coins;
+        return coins
+                .stream()
+                .filter(coin->coin.marketName.startsWith("BTC"))
+                .sorted((c1, c2) -> Double.compare(c2.last, c1.last))
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/coinvolumes")

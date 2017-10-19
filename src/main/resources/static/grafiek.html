@@ -20,7 +20,8 @@
 
 <nav>
     <div class="nav-wrapper teal">
-        <a href="#" class="brand-logo" style="text-indent: 25px;">Bittrex Scraper</a>
+        <div id="coinsName"></div>
+
     </div>
 </nav>
 
@@ -42,6 +43,8 @@
     google.charts.setOnLoadCallback(drawBasic);
     function drawBasic() {
         var coin = $.urlParam('coin');
+        $('#coinsName').append(coin);
+
         $.ajax({
             url: "coinrates?marketname="+coin
         }).then(function(obj) {
