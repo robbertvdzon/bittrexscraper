@@ -1,5 +1,8 @@
 package com.vdzon.bittrexscraper.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +15,13 @@ import java.util.UUID;
 public class CoinRate {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @JsonIgnore
     private Long uuid;
+    @JsonIgnore
     private Long marketUuid;
+    @JsonProperty(value="r")
     private double rate;
+    @JsonProperty(value="t")
     private long timestamp;
 
     public CoinRate() {
