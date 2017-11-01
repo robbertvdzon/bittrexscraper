@@ -3,9 +3,11 @@ package com.vdzon.bittrexscraper.rest;
 import com.vdzon.bittrexscraper.pojo.CoinRate;
 import com.vdzon.bittrexscraper.pojo.CoinVolume;
 import com.vdzon.bittrexscraper.pojo.MarketSummary;
+import com.vdzon.bittrexscraper.pojo.Summary;
 import com.vdzon.bittrexscraper.storage.CoinRateRepository;
 import com.vdzon.bittrexscraper.storage.CoinVolumeRepository;
 import com.vdzon.bittrexscraper.storage.MarketSummaryRepository;
+import com.vdzon.bittrexscraper.storage.SummaryRateRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,21 @@ public class BittrexResource {
     @Inject
     CoinVolumeRepository coinVolumeRepository;
 
+    @Inject
+    SummaryRateRepository summaryRateRepository;
+
+
+    @GetMapping(path = "/getsummaries")
+    public @ResponseBody
+    List<Summary> getSummaries() {
+        Iterable<Summary> all = summaryRateRepository.findAll();
+        List<Summary> summary = new ArrayList<>();
+        all.forEach(summ -> summary.add(summ));
+        return summary
+                .stream()
+                .sorted((c1, c2) -> Double.compare(c2.getTimestamp(), c1.getTimestamp()))
+                .collect(Collectors.toList());
+    }
 
     @GetMapping(path = "/getmarketsummaries")
     public @ResponseBody

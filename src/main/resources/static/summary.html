@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
+          media="screen,projection"/>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+
+<body>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<nav>
+    <div class="nav-wrapper teal">
+        <div>Summary</div>
+
+    </div>
+</nav>
+
+<div id="chart_bitcoin_div"></div>
+<div id="chart_average_div"></div>
+<div id="chart_totalvolume_div"></div>
+
+<script>
+
+
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawBasic);
+    function drawBasic() {
+
+        $.ajax({
+            url: "getsummaries"
+        }).then(function(obj) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('datetime', 'X');
+            data.addColumn('number', "bitcoin-euro");
+
+
+
+            for(var i in obj)
+            {
+                var timestamp =obj[i].t;
+                var rate =obj[i].e;
+
+                var utcSeconds = obj[i].t;
+                var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+                d.setUTCSeconds(utcSeconds);
+
+                data.addRow([d,rate]);
+
+            }
+            var options = {
+                hAxis: {
+                    title: 'Time'
+                },
+                vAxis: {
+                    title: 'Eur'
+                }
+            };
+            var chart = new google.visualization.LineChart(document.getElementById('chart_bitcoin_div'));
+            chart.draw(data, options);
+        });
+
+
+
+        $.ajax({
+            url: "getsummaries"
+        }).then(function(obj) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('datetime', 'X');
+            data.addColumn('number', "average rate");
+
+            for(var i in obj)
+            {
+                var timestamp =obj[i].t;
+                var rate =obj[i].a;
+
+                var utcSeconds = obj[i].t;
+                var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+                d.setUTCSeconds(utcSeconds);
+
+                data.addRow([d,rate]);
+
+            }
+            var options = {
+                hAxis: {
+                    title: 'Time'
+                },
+                vAxis: {
+                    title: 'Rate'
+                }
+            };
+            var chart = new google.visualization.LineChart(document.getElementById('chart_average_div'));
+            chart.draw(data, options);
+        });
+
+
+    $.ajax({
+        url: "getsummaries"
+    }).then(function(obj) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'X');
+        data.addColumn('number', "total volume");
+
+        for(var i in obj)
+        {
+            var timestamp =obj[i].t;
+            var rate =obj[i].tv;
+
+            var utcSeconds = obj[i].t;
+            var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+            d.setUTCSeconds(utcSeconds);
+
+            data.addRow([d,rate]);
+
+        }
+        var options = {
+            hAxis: {
+                title: 'Time'
+            },
+            vAxis: {
+                title: 'Volume'
+            }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('chart_totalvolume_div'));
+        chart.draw(data, options);
+    })
+
+    }
+
+
+</script>
+</body>
+</html>
