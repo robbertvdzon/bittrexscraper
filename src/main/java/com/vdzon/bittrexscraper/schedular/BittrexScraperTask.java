@@ -64,7 +64,6 @@ public class BittrexScraperTask {
     private int processSummary(MarketSummary summ) {
         MarketSummary lastMarketSummary = findInCacheOrCreateNew(summ);
         boolean volumeChanged = valueChangedEnough(summ.getVolume(), lastMarketSummary.getVolume(),MAX_PERC_CHANGED);
-        volumeChanged = false; // only check rate!
         boolean rateChanged = valueChangedEnough(summ.getLast(), lastMarketSummary.getLast(),MAX_PERC_CHANGED);
         if (volumeChanged||rateChanged) {
             if (lastMarketSummary!=null) {
