@@ -22,8 +22,6 @@ public class Summary {
     private double averageRate;
     @JsonProperty(value="tv")
     private double totalVolume;
-    @JsonProperty(value="bv")
-    private double btcVolume;
     @JsonProperty(value="t")
     private long timestamp;
 
@@ -34,7 +32,6 @@ public class Summary {
         this.btcEuroPrice = btcEuroPrice;
         this.averageRate = averageRate;
         this.totalVolume = totalVolume;
-        this.btcVolume = btcVolume;
         this.timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
 
     }
@@ -59,7 +56,4 @@ public class Summary {
         return timestamp;
     }
 
-    public double getBtcVolume() {
-        return btcVolume;
-    }
 }
