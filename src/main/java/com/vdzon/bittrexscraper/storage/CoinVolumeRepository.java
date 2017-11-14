@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface CoinVolumeRepository extends CrudRepository<CoinVolume, Long> {
     List<CoinVolume> findBymarketUuidOrderByTimestampDesc(Long marketUuid);
+    CoinVolume findFirstBymarketUuidOrderByTimestampDesc(Long marketUuid);
 
 }

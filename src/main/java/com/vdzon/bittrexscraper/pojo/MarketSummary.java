@@ -20,6 +20,8 @@ public class MarketSummary {
     public double volume;
     @JsonProperty("Last")
     public double last;
+    @JsonProperty("LastData")
+    transient public CoinData lastData;
 
     public Long getUuid() {
         return uuid;
@@ -51,6 +53,14 @@ public class MarketSummary {
 
     public void setLast(double last) {
         this.last = last;
+    }
+
+    public CoinData getLastData() {
+        return lastData;
+    }
+
+    public void setLastData(CoinData lastData) {
+        this.lastData = lastData;
     }
 
     @Override
