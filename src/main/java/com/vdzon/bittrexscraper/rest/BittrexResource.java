@@ -1,6 +1,9 @@
 package com.vdzon.bittrexscraper.rest;
 
-import com.vdzon.bittrexscraper.pojo.*;
+import com.vdzon.bittrexscraper.pojo.CoinRate;
+import com.vdzon.bittrexscraper.pojo.CoinVolume;
+import com.vdzon.bittrexscraper.pojo.MarketSummary;
+import com.vdzon.bittrexscraper.pojo.Summary;
 import com.vdzon.bittrexscraper.storage.CoinRateRepository;
 import com.vdzon.bittrexscraper.storage.CoinVolumeRepository;
 import com.vdzon.bittrexscraper.storage.MarketSummaryRepository;
@@ -51,39 +54,12 @@ public class BittrexResource {
     List<MarketSummary> getMarketSummaries() {
         Iterable<MarketSummary> all = marketSummaryRepository.findAll();
         List<MarketSummary> coins = new ArrayList<>();
-        all.forEach(summ -> coins.add(enrich(summ)));
+        all.forEach(summ -> coins.add(summ));
         return coins
                 .stream()
                 .filter(coin->coin.marketName.startsWith("BTC"))
                 .sorted((c1, c2) -> Double.compare(c2.last, c1.last))
                 .collect(Collectors.toList());
-    }
-
-    private MarketSummary enrich(MarketSummary summ) {
-        CoinRate cr = coinRateRepository.findFirstBymarketUuidOrderByTimestampDesc(summ.uuid);
-        CoinVolume cv = coinVolumeRepository.findFirstBymarketUuidOrderByTimestampDesc(summ.uuid);
-        CoinData coinData = new CoinData();
-        if (cr!=null) {
-            coinData.setHighest12h(cr.getHighest12h());
-            coinData.setHighest24h(cr.getHighest24h());
-            coinData.setHighest26h(cr.getHighest26h());
-            coinData.setLowest12h(cr.getLowest12h());
-            coinData.setLowest24h(cr.getLowest24h());
-            coinData.setLowest26h(cr.getLowest26h());
-            coinData.setMacd1h1m(cr.getLowest26h());
-            coinData.setMarketUuid(cr.getMarketUuid());
-            coinData.setRate(cr.getRate());
-            coinData.setRsi1h(cr.getRsi1h());
-            coinData.setSignald1h1m(cr.getSignald1h1m());
-            coinData.setStc1h1m(cr.getStc1h1m());
-            coinData.setTimestamp(cr.getTimestamp());
-            coinData.setUuid(cr.getUuid());
-        }
-        if (cv!=null) {
-            coinData.setVolume(cv.getVolume());
-        }
-        summ.setLastData(coinData);
-        return summ;
     }
 
     @GetMapping(path = "/coinvolumes")
