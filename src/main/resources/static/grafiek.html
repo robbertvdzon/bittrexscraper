@@ -26,16 +26,7 @@
 </nav>
 
 <div id="chart_div"></div>
-<div id="chart_macd1h_div"></div>
-<div id="chart_s1h1m_div"></div>
-<div id="chart_rsi1h_div"></div>
-<div id="chart_stc1h1m_div"></div>
-<div id="chart_hi24h_div"></div>
-<div id="chart_lo24h_div"></div>
-<div id="chart_hi26h_div"></div>
-<div id="chart_lo26h_div"></div>
-<div id="chart_hi12h_div"></div>
-<div id="chart_lo12h_div"></div>
+
 
 <script>
     $.urlParam = function(name){
@@ -57,79 +48,33 @@
         $.ajax({
             url: "coinrates?marketname="+coin
         }).then(function(obj) {
-            var data = createData(coin);
-            var dataMacd1h = createMacdData();
-            var datarsi1h = createData(coin);
-            var datastc1h1m = createData(coin);
-            var datahi24h = createHighLowData();
-            var datahi26h = createHighLowData();
-            var datahi12h = createHighLowData();
+            var data = new google.visualization.DataTable();
+            data.addColumn('datetime', 'X');
+            data.addColumn('number', coin);
 
             for(var i in obj)
             {
                 var timestamp =obj[i].t;
+                var rate =obj[i].r;
+
                 var utcSeconds = obj[i].t;
                 var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
                 d.setUTCSeconds(utcSeconds);
 
-                data.addRow([d,obj[i].r]);
-                dataMacd1h.addRow([d,obj[i].md1h1m,obj[i].s1h1m]);
-                datarsi1h.addRow([d,obj[i].rsi1h]);
-                datastc1h1m.addRow([d,obj[i].stc1h1m]);
-                datahi24h.addRow([d,obj[i].hi24h,obj[i].lo24h]);
-                datahi26h.addRow([d,obj[i].hi26h,obj[i].lo26h]);
-                datahi12h.addRow([d,obj[i].hi12h,obj[i].lo12h]);
+                data.addRow([d,rate]);
 
             }
-            drawChart(data, 'chart_div','Rate');
-            drawChart(dataMacd1h, 'chart_macd1h_div','macd 1h');
-            drawChart(datarsi1h, 'chart_rsi1h_div','rsi 1h');
-            drawChart(datastc1h1m, 'chart_stc1h1m_div','stc 1h1m');
-            drawChart(datahi24h, 'chart_hi24h_div','hi/lo 24h');
-            drawChart(datahi26h, 'chart_hi26h_div','hi/lo 26h');
-            drawChart(datahi12h, 'chart_hi12h_div','hi/lo 12h');
-        });
-
-        function createData(name){
-            var data = new google.visualization.DataTable();
-            data.addColumn('datetime', 'X');
-            data.addColumn('number', name);
-            return data;
-        }
-
-        function createMacdData(){
-            var data = new google.visualization.DataTable();
-            data.addColumn('datetime', 'X');
-            data.addColumn('number', 'macd');
-            data.addColumn('number', 'signal');
-            return data;
-        }
-
-        function createHighLowData(){
-            var data = new google.visualization.DataTable();
-            data.addColumn('datetime', 'X');
-            data.addColumn('number', 'high');
-            data.addColumn('number', 'low');
-            return data;
-        }
-
-        function drawChart(data, div, name){
-            var chart = new google.visualization.LineChart(document.getElementById(div));
-            chart.draw(data, getOptions(name));
-        }
-
-        function getOptions(name){
             var options = {
                 hAxis: {
                     title: 'Time'
                 },
                 vAxis: {
-                    title: name
+                    title: 'Rate'
                 }
             };
-            return options;
-
-        }
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        });
     }
 
 
