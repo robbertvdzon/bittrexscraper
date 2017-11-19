@@ -7,14 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Entity
-@Table(indexes = @Index(columnList = "marketUuid,timestamp"))
 public class CoinRate {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
