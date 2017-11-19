@@ -1,6 +1,5 @@
 package com.vdzon.bittrexscraper.schedular;
 
-import com.vdzon.bittrexscraper.enrichment.Enrich;
 import com.vdzon.bittrexscraper.pojo.*;
 import com.vdzon.bittrexscraper.storage.CoinRateRepository;
 import com.vdzon.bittrexscraper.storage.CoinVolumeRepository;
@@ -37,9 +36,6 @@ public class BittrexScraperTask {
 
     @Inject
     SummaryRateRepository summaryRateRepository;
-
-    @Inject
-    Enrich enrich;
 
 
     @PostConstruct
@@ -129,11 +125,8 @@ public class BittrexScraperTask {
         }
         if (rateChanged) {
             System.out.println("Rate is changed more then "+MAX_PERC_CHANGED+"% for "+summ.getMarketName()+"/"+summ.getUuid()+" : "+ lastMarketSummary.getLast()+" -> "+summ.getLast());
-            CoinRate coinRate = new CoinRate(summ.uuid, summ.getLast());
-            CoinRate enrichedCoinRate = enrich.enrich(summ.uuid, coinRate);
-            coinRateRepository.save(enrichedCoinRate);
+            coinRateRepository.save(new CoinRate(summ.uuid,summ.getLast()));
         }
-
         return volumeChanged||rateChanged ? 1 : 0;
     }
 
