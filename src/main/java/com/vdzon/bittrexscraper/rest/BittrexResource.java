@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,12 @@ public class BittrexResource {
     @Inject
     SummaryRateRepository summaryRateRepository;
 
+
+    @GetMapping(path = "/getcurrenttime")
+    public @ResponseBody
+    long getCurrentTime() {
+        return LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+    }
 
     @GetMapping(path = "/getsummaries")
     public @ResponseBody
@@ -59,6 +68,19 @@ public class BittrexResource {
                 .stream()
                 .filter(coin->coin.marketName.startsWith("BTC"))
                 .sorted((c1, c2) -> Double.compare(c2.last, c1.last))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "/getcoindata")
+    public @ResponseBody
+    List<MarketSummary> getMarketSummaries(@RequestParam(value = "timestamp") long timestamp) {
+        Iterable<MarketSummary> currentMarkets = marketSummaryRepository.findAll();
+        List<MarketSummary> currentCoins = new ArrayList<>();
+        currentMarkets.forEach(summ -> currentCoins.add(summ));
+        return currentCoins
+                .stream()
+                .filter(coin->coin.marketName.startsWith("BTC"))
+                .map(coin -> getCoinAtTimestamp(coin, timestamp))
                 .collect(Collectors.toList());
     }
 
@@ -91,6 +113,28 @@ public class BittrexResource {
                 .filter(rate->rate.getTimestamp()>datetimefrom)
                 .filter(rate->rate.getTimestamp()<datetimeto)
                 .collect(Collectors.toList());
+    }
+
+    private MarketSummary getCoinAtTimestamp(MarketSummary coin, long timestamp) {
+        MarketSummary result = new MarketSummary(
+                coin.uuid,
+                coin.getMarketName(),
+                findVolumeOn(coin.uuid, timestamp),
+                findRateOn(coin.uuid, timestamp)
+        );
+        return result;
+    }
+
+    private double findRateOn(long coinUuid, long timestamp) {
+        Iterable<CoinRate> coinrateAfter = coinRateRepository.findCoinrateAfter(coinUuid, timestamp);
+        Iterator<CoinRate> iterator = coinrateAfter.iterator();
+        return iterator.hasNext()? iterator.next().getRate() : -1;
+    }
+
+    private double findVolumeOn(long coinUuid, long timestamp) {
+        Iterable<CoinVolume> coinrateAfter = coinVolumeRepository.findCoinvolumeAfter(coinUuid, timestamp);
+        Iterator<CoinVolume> iterator = coinrateAfter.iterator();
+        return iterator.hasNext()? iterator.next().getVolume() : -1;
     }
 
 }

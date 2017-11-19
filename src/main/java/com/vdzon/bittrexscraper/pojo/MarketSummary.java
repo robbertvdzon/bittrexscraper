@@ -21,6 +21,16 @@ public class MarketSummary {
     @JsonProperty("Last")
     public double last;
 
+    public MarketSummary() {
+    }
+
+    public MarketSummary(Long iuid, String marketName, double volume, double last) {
+        this.uuid = uuid;
+        this.marketName = marketName;
+        this.volume = volume;
+        this.last = last;
+    }
+
     public Long getUuid() {
         return uuid;
     }
