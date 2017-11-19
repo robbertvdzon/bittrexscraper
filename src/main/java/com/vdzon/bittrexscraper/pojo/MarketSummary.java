@@ -24,7 +24,7 @@ public class MarketSummary {
     public MarketSummary() {
     }
 
-    public MarketSummary(Long iuid, String marketName, double volume, double last) {
+    public MarketSummary(Long uuid, String marketName, double volume, double last) {
         this.uuid = uuid;
         this.marketName = marketName;
         this.volume = volume;
