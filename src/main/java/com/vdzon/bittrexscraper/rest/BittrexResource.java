@@ -126,15 +126,13 @@ public class BittrexResource {
     }
 
     private double findRateOn(long coinUuid, long timestamp) {
-        Iterable<CoinRate> coinrateAfter = coinRateRepository.findCoinrateAfter(coinUuid, timestamp);
-        Iterator<CoinRate> iterator = coinrateAfter.iterator();
-        return iterator.hasNext()? iterator.next().getRate() : -1;
+        CoinRate coinrateAfter = coinRateRepository.findFirstCoinrateAfter(coinUuid, timestamp);
+        return coinrateAfter != null ? coinrateAfter.getRate() : -1;
     }
 
     private double findVolumeOn(long coinUuid, long timestamp) {
-        Iterable<CoinVolume> coinrateAfter = coinVolumeRepository.findCoinvolumeAfter(coinUuid, timestamp);
-        Iterator<CoinVolume> iterator = coinrateAfter.iterator();
-        return iterator.hasNext()? iterator.next().getVolume() : -1;
+        CoinVolume coinVolumeAfter = coinVolumeRepository.findFirstCoinvolumeAfter(coinUuid, timestamp);
+        return coinVolumeAfter!=null ? coinVolumeAfter.getVolume() : -1;
     }
 
 }
