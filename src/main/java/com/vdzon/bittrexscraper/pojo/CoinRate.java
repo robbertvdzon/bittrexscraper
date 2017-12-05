@@ -21,15 +21,21 @@ public class CoinRate {
     private Long marketUuid;
     @JsonProperty(value="r")
     private double rate;
+    @JsonProperty(value="b")
+    private double bid;
+    @JsonProperty(value="a")
+    private double ask;
     @JsonProperty(value="t")
     private long timestamp;
 
     public CoinRate() {
     }
 
-    public CoinRate(Long marketUuid, double rate) {
+    public CoinRate(Long marketUuid, double rate, double bid, double ask) {
         this.marketUuid = marketUuid;
         this.rate = rate;
+        this.bid = bid;
+        this.ask = ask;
         this.timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
     }
 
@@ -55,6 +61,22 @@ public class CoinRate {
 
     public void setRate(double rate) {
         this.rate = rate;
+    }
+
+    public double getBid() {
+        return bid;
+    }
+
+    public void setBid(double bid) {
+        this.bid = bid;
+    }
+
+    public double getAsk() {
+        return ask;
+    }
+
+    public void setAsk(double ask) {
+        this.ask = ask;
     }
 
     public long getTimestamp() {

@@ -20,15 +20,21 @@ public class MarketSummary {
     public double volume;
     @JsonProperty("Last")
     public double last;
+    @JsonProperty("Bid")
+    public double bid;
+    @JsonProperty("Ask")
+    public double ask;
 
     public MarketSummary() {
     }
 
-    public MarketSummary(Long uuid, String marketName, double volume, double last) {
+    public MarketSummary(Long uuid, String marketName, double volume, CoinRate coinRate) {
         this.uuid = uuid;
         this.marketName = marketName;
         this.volume = volume;
-        this.last = last;
+        this.last = coinRate.getRate();
+        this.bid = coinRate.getBid();
+        this.ask = coinRate.getAsk();
     }
 
     public Long getUuid() {
@@ -63,6 +69,22 @@ public class MarketSummary {
         this.last = last;
     }
 
+    public double getBid() {
+        return bid;
+    }
+
+    public void setBid(double bid) {
+        this.bid = bid;
+    }
+
+    public double getAsk() {
+        return ask;
+    }
+
+    public void setAsk(double ask) {
+        this.ask = ask;
+    }
+
     @Override
     public String toString() {
         return "MarketSummary{" +
@@ -70,6 +92,8 @@ public class MarketSummary {
                 ", marketName='" + marketName + '\'' +
                 ", volume=" + volume +
                 ", last=" + last +
+                ", bid=" + bid +
+                ", ask=" + ask +
                 '}';
     }
 }

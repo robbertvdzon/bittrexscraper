@@ -125,9 +125,9 @@ public class BittrexResource {
         return result;
     }
 
-    private double findRateOn(long coinUuid, long timestamp) {
+    private CoinRate findRateOn(long coinUuid, long timestamp) {
         CoinRate coinrateAfter = coinRateRepository.findFirstCoinrateAfter(coinUuid, timestamp);
-        return coinrateAfter != null ? coinrateAfter.getRate() : -1;
+        return coinrateAfter != null ? coinrateAfter : new CoinRate(0l,0.0,0.0,0.0);
     }
 
     private double findVolumeOn(long coinUuid, long timestamp) {

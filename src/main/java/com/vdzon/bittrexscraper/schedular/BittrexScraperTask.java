@@ -125,7 +125,7 @@ public class BittrexScraperTask {
         }
         if (rateChanged) {
             System.out.println("Rate is changed more then "+MAX_PERC_CHANGED+"% for "+summ.getMarketName()+"/"+summ.getUuid()+" : "+ lastMarketSummary.getLast()+" -> "+summ.getLast());
-            coinRateRepository.save(new CoinRate(summ.uuid,summ.getLast()));
+            coinRateRepository.save(new CoinRate(summ.uuid,summ.getLast(), summ.getBid(), summ.getAsk()));
         }
         return volumeChanged||rateChanged ? 1 : 0;
     }
